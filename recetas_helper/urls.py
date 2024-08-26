@@ -6,5 +6,6 @@ urlpatterns = [
     path('recetas/slug/<str:slug>', Clase2.as_view()),
     path('recetas-home', Clase3.as_view()),
     path('recetas-panel/<int:id>', Clase4.as_view()),
-    path('recetas-buscador', Clase5.as_view())
+    path('recetas-buscador', Clase5.as_view()),
+    path('recetas-paginacion', Clase6.as_view())
 ]

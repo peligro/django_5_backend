@@ -16,6 +16,7 @@ from datetime import datetime
 from django.utils.dateformat import DateFormat
 from django.utils.formats import get_format
 from seguridad.decorators import logueado
+from utilidades import utilidades
 
 class Clase1(APIView):
     
@@ -95,5 +96,16 @@ class Clase5(APIView):
             return JsonResponse({"estado":"error", "mensaje":f"Ocurrió un error inesperado 3"},  status=HTTPStatus.BAD_REQUEST)
         data=Receta.objects.filter(categoria_id=request.GET.get('categoria_id')).filter(nombre__icontains=request.GET.get('search')).all()
         datos_json = RecetaSerializer(data, many=True)
+        return JsonResponse({"data":datos_json.data}, status=HTTPStatus.OK)
+    
+
+class Clase6(APIView):
+    
+    def get(self, request):
+        data=Receta.objects.order_by('-id').all()
+        paginar=utilidades.paginacion(data, request)
+        print(paginar)
+        datos_json = RecetaSerializer(paginar[0], many=True)
+        
         return JsonResponse({"data":datos_json.data}, status=HTTPStatus.OK)
 

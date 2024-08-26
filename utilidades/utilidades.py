@@ -3,6 +3,9 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+#paginación
+from django.core.paginator import Paginator
+
 import os
 from dotenv import load_dotenv
 
@@ -21,3 +24,15 @@ def sendMail(html, asunto, para):
         server.quit()
     except SMTPResponseException as e:
         print("error envío mail")
+
+
+def paginacion(total, request):
+    paginator = Paginator(total, 2)
+    page = request.GET.get('page')
+    datos = paginator.get_page(page)
+    numeros=[]
+    if len(datos)>=2:
+        for ultima in range(1, datos.paginator.num_pages):
+            numeros.append(ultima)
+        numeros.append(ultima+1)
+    return [datos, numeros, page]
