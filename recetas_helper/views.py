@@ -20,7 +20,7 @@ from utilidades import utilidades
 
 class Clase1(APIView):
     
-    
+    @logueado()
     def post(self, request):
         
         if request.data.get("id")==None or not request.data.get("id"):
@@ -80,7 +80,7 @@ class Clase4(APIView):
             existe = User.objects.filter(pk=id).get()
         except User.DoesNotExist:
             return JsonResponse({"estado":"error", "mensaje":f"Ocurrió un error inesperado"},  status=HTTPStatus.BAD_REQUEST)
-        data=Receta.objects.filter(user_id=id).all()
+        data=Receta.objects.filter(user_id=id).order_by('-id').all()
         datos_json = RecetaSerializer(data, many=True)
         return JsonResponse({"data":datos_json.data}, status=HTTPStatus.OK)
 

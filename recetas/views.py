@@ -15,6 +15,8 @@ from django.utils.dateformat import DateFormat
 from django.utils.formats import get_format
 from django.core.paginator import Paginator
 from seguridad.decorators import logueado
+from jose import jwt
+from django.conf import settings
 
 
 class Clase1(APIView):
@@ -61,8 +63,16 @@ class Clase1(APIView):
                 fs.url(request.FILES['foto'])
             except Exception as a:
                 return JsonResponse({"estado":"error", "mensaje":f"No se pudo subir la foto"},  status=HTTPStatus.BAD_REQUEST)
+            #obtenemos el id del usuario del token jwt
+            header = request.headers.get('Authorization').split(" ")
             try:
-                Receta.objects.create(nombre=request.data['nombre'], tiempo=request.data['tiempo'], descripcion=request.data['descripcion'], categoria_id=request.data['categoria_id'], foto=foto, fecha=datetime.now())
+                resuelto = jwt.decode(header[1], settings.SECRET_KEY, algorithms=['HS512'])  
+            except Exception as e:
+                return JsonResponse({"estado":"error", "mensaje":f"Sin autorización {e}"},  status=HTTPStatus.UNAUTHORIZED)
+            
+            #creamos la receta
+            try:
+                Receta.objects.create(nombre=request.data['nombre'], tiempo=request.data['tiempo'], descripcion=request.data['descripcion'], categoria_id=request.data['categoria_id'], foto=foto, fecha=datetime.now(), user_id=resuelto['id'])
                 return JsonResponse({"estado":"ok", "mensaje":"Se creó el registro exitosamente"},  status=HTTPStatus.CREATED)
             except Exception as e:
                 return JsonResponse({"estado":"error", "mensaje":"Ocurrió un error inesperado"},  status=HTTPStatus.BAD_REQUEST)

@@ -6,3 +6,4 @@ python-dotenv==1.0.1
 django-autoslug==1.9.9
 python-jose==3.3.0
 drf-yasg==1.21.7
+django-cors-headers==4.4.0

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',#pip install drf-yasg
     'rest_framework',
-    
+    'corsheaders',
     'categorias',
     'recetas',
     'contacto',
@@ -58,8 +58,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True 
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://192.168.1.88:5173',
+]  
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://192.168.1.88:5173',
+]
 ROOT_URLCONF = 'backend.urls'
  
 
